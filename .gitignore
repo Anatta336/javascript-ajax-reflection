@@ -1,1 +1,6 @@
+# local-only documentation
 Progress.md
+
+node_modules
+
+#dist/js/secret/*
