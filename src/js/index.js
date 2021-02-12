@@ -2,6 +2,7 @@ import PhotoSource from './photo-source';
 import Hideable from './hideable';
 import DogModel from './dog-model';
 import DogView from './dog-view';
+import onLoadPromise from './on-load-promise';
 
 /**
  * Creates an HTML element that consists of a random dog photo
@@ -14,11 +15,9 @@ function fetchDog() {
     currentDog.view = new DogView(dogModel);
 
     const img = currentDog.view.createImg();
-    photo.element.appendChild(img)
 
-    // TODO: credit photographer
+    // TODO: credit photographer too
 
-    // TODO: return div containing whole thing
     return img;
   });
 }
@@ -31,8 +30,13 @@ function onFirstLoad() {
 
   // TODO: could the show/hide be delayed until the image has been fetched?
   // avoiding the juddering of elements being lost and gained would be nice.
+  // on-load-promise is the start of that
   fetchDog()
-    .then(() => {
+    .then((img) => {
+      return onLoadPromise(img);
+    })
+    .then((img) => {
+      photo.element.appendChild(img)
       loading.hide();
       adoption.show();
     });
@@ -46,3 +50,5 @@ const loading = new Hideable(document.querySelector('.loading'));
 const adoption = new Hideable(document.querySelector('.adoption'));
 
 onFirstLoad();
+
+// TODO: check for unsplashAccessKey being undefined or emptystring, and show a meaningful message

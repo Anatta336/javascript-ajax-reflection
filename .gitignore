@@ -4,3 +4,6 @@ Progress.md
 node_modules
 
 dist/js/secret/*
+
+# dist/js/*
+# dist/css/*
