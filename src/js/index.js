@@ -1,23 +1,25 @@
-import makeUnsplash from './photo';
-import makeHideable from './hideable';
+import PhotoSource from './photo-source';
+import Hideable from './hideable';
+import DogModel from './dog-model';
+import DogView from './dog-view';
 
 /**
  * Creates an HTML element that consists of a random dog photo
  * with attribution for the photo's creator.
  */
-function showDogPhoto() {  
-  return unsplash.randomDog()
-    .then(dog => {
-      // create image of dog
-      const img = document.createElement('img');
-      img.src = dog.url;
-      img.alt = dog.alt;
-      photo.element.appendChild(img)
+function fetchDog() {  
+  return photoSource.randomDog()
+  .then(dogModel => {
+    currentDog.model = dogModel;
+    currentDog.view = new DogView(dogModel);
 
-      // TODO: credit photographer
+    const img = currentDog.view.createImg();
+    photo.element.appendChild(img)
 
-      // TODO: return div containing whole thing
-      return img;
+    // TODO: credit photographer
+
+    // TODO: return div containing whole thing
+    return img;
   });
 }
 
@@ -27,16 +29,20 @@ function onFirstLoad() {
   console.log(photo);
   console.log(loading);
 
-  showDogPhoto()
+  // TODO: could the show/hide be delayed until the image has been fetched?
+  // avoiding the juddering of elements being lost and gained would be nice.
+  fetchDog()
     .then(() => {
       loading.hide();
       adoption.show();
     });
 }
 
-const unsplash = makeUnsplash();
-const photo = makeHideable(document.querySelector('.photo'));
-const loading = makeHideable(document.querySelector('.loading'));
-const adoption = makeHideable(document.querySelector('.adoption'));
+let currentDog = {};
+
+const photoSource = new PhotoSource(unsplashAccessKey);
+const photo = new Hideable(document.querySelector('.photo'));
+const loading = new Hideable(document.querySelector('.loading'));
+const adoption = new Hideable(document.querySelector('.adoption'));
 
 onFirstLoad();

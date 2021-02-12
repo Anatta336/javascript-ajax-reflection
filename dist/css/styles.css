@@ -348,6 +348,10 @@ body {
   justify-content: center;
 }
 
+p {
+  margin: 0 0 1rem;
+}
+
 section {
   display: flex;
   flex-direction: column;
@@ -364,6 +368,10 @@ button {
 }
 button:hover {
   background-color: #bec5e4;
+}
+
+.photo {
+  margin: 1rem;
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -2,44 +2,40 @@
  * Wraps an HTML element so it can be easily shown or hidden.
  * @param {Element} element HTML Element that will have its visibility changed.
  */
-export default function makeHideable(element) {
-  if (!(element instanceof Element)) {
-    console.log('That\'s not an Element');
-    throw new TypeError('Expected to be an Element.');
+export default class Hideable {
+  
+  constructor (element) {
+    if (!(element instanceof Element)) {
+      throw new TypeError('Expected to be an Element.');
+    }
+    this.element = element;
+    
+    this.hiddenStyle = 'none';
+    this.isVisible = !(this.element.style.display === this.hiddenStyle);
+    this.visibleStyle = this.isVisible ? this.element.style.display : 'block';
   }
-
-  const hiddenStyle = 'none';
-  let isVisible = !(element.style.display === hiddenStyle);
-  const visibleStyle = isVisible ? element.style.display : 'block';
-
-  function show() {
-    if (isVisible) {
+  
+  show() {
+    if (this.isVisible) {
       return;
     }
-    element.style.display = visibleStyle;
-    isVisible = true;
+    this.element.style.display = this.visibleStyle;
+    this.isVisible = true;
   }
 
-  function hide() {
-    if (!isVisible) {
+  hide() {
+    if (!this.isVisible) {
       return;
     }
-    element.style.display = hiddenStyle;
-    isVisible = false;
+    this.element.style.display = this.hiddenStyle;
+    this.isVisible = false;
   }
 
-  function toggleVisibility() {
-    if (isVisible) {
+  toggleVisibility() {
+    if (this.isVisible) {
       hide();
     } else {
       show();
     }
-  }
-
-  return {
-    element,
-    show,
-    hide,
-    toggleVisibility,
   }
 }
