@@ -4,11 +4,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- scripts -->
     <script src="js/secret/unsplash-key.js" defer></script>
     <script src="js/main.js" defer></script>
-    <title>They're All Great</title>
+
+    <title>They're good dogs, Brant</title>
 </head>
 <body>
+    <noscript>
+        <p class="error">This page needs JavaScript to be enabled. Please turn it on in your browser or use a browser that supports it.</p>
+    </noscript>
+
+    <section class="loading">
+        <p>Finding the best dog&hellip;</p>
+    </section>
+
+    <section class="photo">
+        <!-- image will be placed here by JavaScript -->
+    </section>
     
+    <section class="adoption">
+        <p>Wow, it's the best dog!</p>
+        <p>Who would like to hang out with them?</p>
+        <ul>
+            <li>
+                <div class="existing-email">a@example.com
+                    <button id="adopt-a@example.com" type="button">Adopt</button>
+                </div>
+                <div class="adopted">
+                    <!-- set of img tags here, clicking opens photo source in new window -->
+                </div>
+            </li>
+            <li>
+                <div>
+                    <input type="email" placeholder="emily@example.com">
+                    <button id="adopt-new-email" type="button">Adopt</button>
+                </div>
+            </li>
+        </ul>
+    </section>
 </body>
 </html>

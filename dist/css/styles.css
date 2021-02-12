@@ -340,6 +340,30 @@ template {
 body {
   min-height: 100vh;
   background-color: #ecc3cc;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  padding: 16px;
+  margin: 8px;
+  background-color: #5c72d3;
+  border: 3px solid #463e6b;
+  border-radius: 5px;
+}
+button:hover {
+  background-color: #bec5e4;
 }
 
 /*# sourceMappingURL=styles.css.map */
