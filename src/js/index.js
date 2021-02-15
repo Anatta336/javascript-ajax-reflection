@@ -24,6 +24,48 @@ function fetchDog() {
   });
 }
 
+/**
+ * Attempts to assigns the currently viewed dog to the given email.
+ * @param {string} email Email to assign dog to.
+ */
+function assignCurrentDog(email) {
+  assignModel.assignDog(email, currentDog.model);
+  fetchNextDog();
+}
+
+function disableAllAssignButtons() {
+  newEmailButton.disabled = true;
+  assignView.setButtonsDisabled(true);
+}
+
+function enableAllAssignButtons() {
+  newEmailButton.disabled = false;
+  assignView.setButtonsDisabled(false);
+}
+
+/**
+ * Removes all children from a DOM Node.
+ * @param {Node} parent Parent from which to remove all children.
+ */
+function removeAllChildren(parent) {
+  while (parent.hasChildNodes()) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
+function fetchNextDog() {
+  disableAllAssignButtons();
+  fetchDog()
+    .then(img => {
+      return onLoadPromise(img);
+    })
+    .then(img => {
+      removeAllChildren(photo.element);
+      photo.element.append(img);
+      enableAllAssignButtons();
+    });
+}
+
 function onFirstLoad() {
   adoption.hide();
   
@@ -33,10 +75,10 @@ function onFirstLoad() {
   // TODO: will rework this to fetch the DogModel, then generate img,
   // wait for it to load, then other DOM stuff.
   fetchDog()
-    .then((img) => {
+    .then(img => {
       return onLoadPromise(img);
     })
-    .then((img) => {
+    .then(img => {
       photo.element.append(img)
       adoption.element.append(assignView.rootElement);
       loading.hide();
@@ -50,12 +92,10 @@ function onFirstLoad() {
 let currentDog = {};
 
 const assignModel = new AssignmentsModel();
-const assignView = new AssignmentsView(assignModel);
+const assignView = new AssignmentsView(assignModel, assignCurrentDog);
 
 // TEMP! Make it available for easy testing
 window.assignModel = assignModel;
-
-// TODO: check for unsplashAccessKey being undefined or emptystring, and show a meaningful message
 
 const photoSource = new PhotoSource(unsplashAccessKey);
 const photo = new Hideable(document.querySelector('.photo'));
@@ -73,19 +113,24 @@ const newEmailInput = document.querySelector('#new-email');
 const newEmailButton = document.querySelector('#visit-new-email');
 
 newEmailButton.addEventListener('click', () => {
-  console.log(`assigning to ${newEmailInput.value}`);
-  assignModel.assignDog(newEmailInput.value);
-
+  assignCurrentDog(newEmailInput.value);
   newEmailInput.value = '';
 });
 
+// TODO: check for unsplashAccessKey being undefined or emptystring, and show a meaningful message
+
 // TODO: check for same email being used twice and handle gracefully
+
+// TODO: email validation, display meaningful error
 
 // TODO: circle styling on assigned dogs
 
 // TODO: maybe show author name on hover over assigned dogs
 
-onFirstLoad();
+// TODO: load new dog after assigning current
 
-// FIXME: TypeError when assigning first dog, seems to be caused by
-// 'this' being undefined during the callback
+// TODO: styling for assigned dog photos
+
+// TODO: styling for assigned emails, remove the list mark and put buttons lined up?
+
+onFirstLoad();

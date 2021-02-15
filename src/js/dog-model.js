@@ -2,15 +2,12 @@
  * Class representing the photo of a dog.
  */
 export default class DogModel {
-  constructor (smallUrl, tinyUrl, altText, creatorName, creatorUrl) {
+  constructor (url, altText, creatorName, creatorUrl) {
     /**
-     * URL of a "small" version of the photo, 400px wide.
+     * URL of the image, can add query to request a specific size.
+     * e.g. &q=80&w=128 for a 80% quality jpeg with 128px width
      */
-    this.smallUrl = smallUrl;
-    /**
-     * URL of a thumbnail sized version of the photo, 
-     */
-    this.tinyUrl = tinyUrl;
+    this.url = url;
     /**
      * A string of text that describes the image, suitable for use as alt text.
      */

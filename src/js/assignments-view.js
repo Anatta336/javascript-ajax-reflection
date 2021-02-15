@@ -5,16 +5,35 @@ import DogModel from "./dog-model";
  * Handles representing an AssignmentsModel as HTML elements on the page.
  */
 export default class AssignmentsView {
+
+  /**
+   * @callback assignCurrentToEmail
+   * @param {string} email The address to assign the current dog photo to.
+   */
+
   /**
    * Creates an AssignmentView for the given AssignmentsModel.
-   * @param {AssignmentsModel} assignmentsModel 
+   * @param {AssignmentsModel} assignModel 
+   * @param {assignCurrentToEmail} assignCurrentDog
    */
-  constructor(assignmentsModel) {
+  constructor(assignModel, assignCurrentDog) {
     /**
      * The assignments that this View represents.
      * @type {AssignmentsModel}
      */
-    this.assignmentsModel = assignmentsModel;
+    this.assignModel = assignModel;
+
+    /**
+     * Function that assigns the currently viewed dog to specified email.
+     * @type {assignCurrentToEmail}
+     */
+    this.assignCurrentDog = assignCurrentDog;
+
+    /**
+     * Width of photos to display in px
+     * @type {number} 
+     */
+    this.photoWidth = 120;
 
     /**
      * Keys are email address as a strong, value is the HTMLElement representing
@@ -24,12 +43,20 @@ export default class AssignmentsView {
     this.nodeForEmail = new Map();
 
     /**
+     * Map to store a reference to the "visit" button for each email address.
+     * @type {Map<string, HTMLButtonElement>}
+     */
+    this.buttonForEmail = new Map();
+    this.buttonsAreDisabled = true;
+
+    /**
      * HTML element that represents all the emails and their assigned dogs.
      * @type {HTMLUListElement}
      */
     this.rootElement = this.createFullList();
 
-    assignmentsModel.addCallbackOnAssign(this.updateChangedAssignment);
+    const boundCallback = this.updateChangedAssignment.bind(this);
+    assignModel.addCallbackOnAssign(boundCallback);
   }
 
   /* example of generated HTML
@@ -43,7 +70,7 @@ export default class AssignmentsView {
           <li><img src="dogPhotoB.jpg" alt="A good dog"></li>
         </ul>
     </li>
-    <li id="bob@example.com"> <!-- this.nodeForEmail['bob@example.com'] -->
+    <li id="bob@example.com"> <!-- this.nodeForEmail.get('bob@example.com') -->
         <div class="existing-email">bob@example.com
             <button id="visit-bob@example.com" type="button">Visit</button>
         </div>
@@ -61,17 +88,16 @@ export default class AssignmentsView {
    * @param {DogModel[]} assignedDogModels Array of assigned dog models for the email address.
    */
   updateChangedAssignment(email, assignedDogModels) {
-    console.log(`assignment for ${email} changed.`);
-
-    const existingNode = this.nodeForEmail.get(email);
-    const parent = existingNode.parentNode;
-
-    const updatedNode = this.createListItemForEmail(email, assignedDogModels);
-
-    parent.replaceChild(updatedNode, existingNode);
-    this.nodeForEmail.set(email, updatedNode);
+    if (this.nodeForEmail.has(email)) {
+      const existingNode = this.nodeForEmail.get(email);
+      const updatedNode = this.createListItemForEmail(email, assignedDogModels);
+      this.rootElement.replaceChild(updatedNode, existingNode);
+      this.nodeForEmail.set(email, updatedNode);
+    } else {
+      const newNode = this.createListItemForEmail(email, assignedDogModels);
+      this.rootElement.append(newNode);
+    }
   }
-
 
   /**
    * Generates the full representation of emails and assignments made to them.
@@ -81,7 +107,7 @@ export default class AssignmentsView {
   createFullList() {
     const ul = document.createElement('ul');
     
-    this.assignmentsModel.assignments.forEach((dogModels, email) => {
+    this.assignModel.assignments.forEach((dogModels, email) => {
       const li = this.createListItemForEmail(email, dogModels);
       ul.append(li);
     });
@@ -110,6 +136,11 @@ export default class AssignmentsView {
     button.id = `visit-${email}`;
     button.type = 'button';
     button.append('Visit');
+    button.addEventListener('click', () => {
+      this.assignCurrentDog(email);
+    });
+    button.disabled = this.buttonsAreDisabled;
+    this.buttonForEmail.set(email, button);
 
     const ulOfDogs = document.createElement('ul');
     liForEmail.append(ulOfDogs);
@@ -129,9 +160,34 @@ export default class AssignmentsView {
     const liForDog = document.createElement('li');
     const img = document.createElement('img');
     liForDog.append(img);
-    img.src = dogModel.tinyUrl;
+    img.src = `${dogModel.url}&q=80&w=${this.photoWidth}`;
     img.alt = dogModel.altText;
 
     return liForDog;
+  }
+
+  /**
+   * Checks whether buttons are currently set to be disabled. Note that
+   * returning true doesn't necessarily mean all buttons are disabled,
+   * just that they should be.
+   * @return {boolean} True if buttons are currently set to be disabled.
+   */
+  areButtonsDisabled() {
+    return this.buttonsAreDisabled;
+  }
+
+  /**
+   * Sets whether all the buttons in this view should be disabled. Setting
+   * will apply the value to all existing buttons, and make it the value
+   * applied to any new buttons that are created.
+   * Doesn't prevent the buttons being enabled/disabled by other means.
+   * @param {boolean} areDisabled True if buttons should become disabled.
+   */
+  setButtonsDisabled(areDisabled) {
+    this.buttonsAreDisabled = areDisabled;
+
+    this.buttonForEmail.forEach(button => {
+      button.disabled = this.buttonsAreDisabled;
+    });
   }
 }

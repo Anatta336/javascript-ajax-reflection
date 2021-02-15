@@ -69,11 +69,9 @@ export default class PhotoSource {
     .then(data => {
       const index = Math.floor(Math.random() * data.results.length);
       const dogData = data.results[index];
-
       return new DogModel(
-        dogData.urls.small,
-        dogData.urls.thumbnail,
-        dogData.description,
+        dogData.urls.raw,
+        dogData.alt_description,
         dogData.user.name,
         dogData.user.links.html,
       );

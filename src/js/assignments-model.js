@@ -19,7 +19,7 @@ export default class AssignmentsModel {
   }
 
   /**
-   * @callback assignCallback
+   * @callback onAssignCallback
    * @param {string} email The email that has had its assignments changed.
    * @param {DogModel[]} assignedDogModels The DogModels assigned to the email.
    */
@@ -27,7 +27,7 @@ export default class AssignmentsModel {
   /**
    * Add a callback that'll be called whenever a dog assignment is made. The callback function will
    * be passed the email that the assignment was made to and the full updated array of DogModels.
-   * @param {assignCallback} callback The function to call, will be passed email string and array of DogModels.
+   * @param {onAssignCallback} callback The function to call, will be passed email string and array of DogModels.
    */
   addCallbackOnAssign(callback) {
     if (typeof callback !== 'function') {
@@ -39,7 +39,7 @@ export default class AssignmentsModel {
 
   /**
    * Removes a callback function so it is no longer called when assignments change.
-   * @param {assignCallback} callback The callback function to remove.
+   * @param {onAssignCallback} callback The callback function to remove.
    */
   removeCallbackOnAssign(callback) {
     if (typeof callback !== 'function') {
