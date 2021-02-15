@@ -13,11 +13,7 @@ export default class PhotoSource {
     // the "dog" search can turn up images which aren't dogs, so only look at the most relevant
     this.pageCountFraction = 0.25;
 
-    // TODO: this promise is executed as soon as it's created.
-    // I think I'd like it to be lazily executed intead.
-    console.log('before creating promise');
     this.pagesAvailable = new Promise((fulfill, reject) => {
-      console.log('within promise');
       fetch(this.searchUrl, { headers: this.headers })
       .then(response => {
         if (!response.ok) {
@@ -39,7 +35,6 @@ export default class PhotoSource {
         reject(error);
       });
     });
-    console.log('after creating promise');
   }
 
   /**

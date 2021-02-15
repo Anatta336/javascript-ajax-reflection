@@ -6,6 +6,7 @@ import PhotoSource from './photo-source';
 import onLoadPromise from './on-load-promise';
 import removeAllChildren from './remove-children';
 import Hideable from './hideable';
+import Disableable from './disableable';
 
 export default class DogPhotos {
   /**
@@ -14,9 +15,11 @@ export default class DogPhotos {
    * @param {Object} elements Object with properties that reference various elements on the page.
    * @param {HTMLElement} elements.photo Element where dog's photo should be added as a child.
    * @param {HTMLElement} elements.loading Element that contains loading text that is displayed before the first dog.
-   * @param {HTMLUListElement} elements.adoption Unordered List Element where assignments should be added.
+   * @param {HTMLElement} elements.adoption Element that contains everything related to assigning a dog, should be hidden before first image loads.
+   * @param {HTMLUListElement} elements.displayList Unordered List Element where assignments should be added.
    * @param {HTMLInputElement} elements.emailInput Text input element where user can enter a new email address.
    * @param {HTMLButtonElement} elements.newEmailButton Button element that will assign current dog to the new email address.
+   * @param {Disableable} elements.emailButtonDisable Button element wrapped in Disableable.
    */
   constructor(unsplashAccessKey, elements) {
     /**
@@ -55,14 +58,19 @@ export default class DogPhotos {
     /**
      * @type {Hideable}
      */
-    this.adoptionList = new Hideable(elements.adoption);
+    this.adoption = new Hideable(elements.adoption);
+
+    /**
+     * @type {HTMLUListElement}
+     */
+    this.adoptionList = elements.displayList;
 
     /**
      * @type {AssignmentsView}
      */
     this.assignmentsView = new AssignmentsView(
       this.assignmentsModel,
-      this.adoptionList.element,
+      this.adoptionList,
       (email) => {
         this.assignCurrentDog(email);
       },
@@ -82,6 +90,8 @@ export default class DogPhotos {
       this.inputForNewEmail.value = '';
     })
 
+    this.emailButtonDisable = elements.emailButtonDisable;
+
     this.prepareFirstDog();
   }
 
@@ -91,7 +101,7 @@ export default class DogPhotos {
    */
   prepareFirstDog() {
     this.loadingText.show();
-    this.adoptionList.hide();
+    this.adoption.hide();
 
     // request a random dog
     this.photoSource.randomDog()
@@ -117,7 +127,7 @@ export default class DogPhotos {
 
         // remove the loading text, add the adoption list
         this.loadingText.hide();
-        this.adoptionList.show();
+        this.adoption.show();
       });
   }
 
@@ -163,12 +173,12 @@ export default class DogPhotos {
   }
 
   disableAssignButtons() {
-    this.buttonForNewEmail.disabled = true;
+    this.emailButtonDisable.addDisableCause(this);
     this.assignmentsView.setButtonsDisabled(true);
   }
 
   enableAssignButtons() {
-    this.buttonForNewEmail.disabled = false;
+    this.emailButtonDisable.removeDisableCause(this);
     this.assignmentsView.setButtonsDisabled(false);
   }
 }
