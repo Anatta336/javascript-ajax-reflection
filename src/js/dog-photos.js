@@ -14,7 +14,9 @@ export default class DogPhotos {
    * @param {Object} elements Object with properties that reference various elements on the page.
    * @param {HTMLElement} elements.photo Element where dog's photo should be added as a child.
    * @param {HTMLElement} elements.loading Element that contains loading text that is displayed before the first dog.
-   * @param {HTMLElement} elements.adoption Element where a list of assignments sbould be added.
+   * @param {HTMLUListElement} elements.adoption Unordered List Element where assignments should be added.
+   * @param {HTMLInputElement} elements.emailInput Text input element where user can enter a new email address.
+   * @param {HTMLButtonElement} elements.newEmailButton Button element that will assign current dog to the new email address.
    */
   constructor(unsplashAccessKey, elements) {
     /**
@@ -41,13 +43,6 @@ export default class DogPhotos {
     this.assignmentsModel = new AssignmentsModel();
 
     /**
-     * @type {AssignmentsView}
-     */
-    this.assignmentsView = new AssignmentsView(this.assignmentsModel, (email) => {
-      this.assignCurrentDog(email);
-    });
-
-    /**
      * @type {Hideable}
      */
     this.currentPhoto = new Hideable(elements.photo);
@@ -61,17 +56,27 @@ export default class DogPhotos {
      * @type {Hideable}
      */
     this.adoptionList = new Hideable(elements.adoption);
-    this.adoptionList.element.append(this.assignmentsView.rootElement);
+
+    /**
+     * @type {AssignmentsView}
+     */
+    this.assignmentsView = new AssignmentsView(
+      this.assignmentsModel,
+      this.adoptionList.element,
+      (email) => {
+        this.assignCurrentDog(email);
+      },
+    );
 
     /**
      * @type {HTMLInputElement}
      */
-    this.inputForNewEmail = document.querySelector('#new-email');
+    this.inputForNewEmail = elements.emailInput;
 
     /**
      * @type {HTMLButtonElement}
      */
-    this.buttonForNewEmail = document.querySelector('#visit-new-email');
+    this.buttonForNewEmail = elements.newEmailButton;
     this.buttonForNewEmail.addEventListener('click', () => {
       this.assignCurrentDog(this.inputForNewEmail.value);
       this.inputForNewEmail.value = '';

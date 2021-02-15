@@ -13,15 +13,22 @@ export default class AssignmentsView {
 
   /**
    * Creates an AssignmentView for the given AssignmentsModel.
-   * @param {AssignmentsModel} assignModel 
-   * @param {assignCurrentToEmail} assignCurrentDog
+   * @param {AssignmentsModel} assignModel AssignmentsModel to represent.
+   * @param {HTMLUListElement} listElement List element to add list items to.
+   * @param {assignCurrentToEmail} assignCurrentDog Callback to trigger assigning the current dog to an email address.
    */
-  constructor(assignModel, assignCurrentDog) {
+  constructor(assignModel, listElement, assignCurrentDog) {
     /**
      * The assignments that this View represents.
      * @type {AssignmentsModel}
      */
     this.assignModel = assignModel;
+
+    /**
+     * List element that list items are added to for display.
+     * @type {HTMLUListElement}
+     */
+    this.listElement = listElement;
 
     /**
      * Function that assigns the currently viewed dog to specified email.
@@ -36,8 +43,8 @@ export default class AssignmentsView {
     this.photoWidth = 120;
 
     /**
-     * Keys are email address as a strong, value is the HTMLElement representing
-     * the email address and its assigned dogs.
+     * Keys are email address as a strong, value is the list item element
+     * representing the email address and its assigned dogs.
      * @type {Map<string, HTMLElement>}
      */
     this.nodeForEmail = new Map();
@@ -49,19 +56,15 @@ export default class AssignmentsView {
     this.buttonForEmail = new Map();
     this.buttonsAreDisabled = true;
 
-    /**
-     * HTML element that represents all the emails and their assigned dogs.
-     * @type {HTMLUListElement}
-     */
-    this.rootElement = this.createFullList();
-
     const boundCallback = this.updateChangedAssignment.bind(this);
     assignModel.addCallbackOnAssign(boundCallback);
+
+    this.generateWholeList();
   }
 
   /* example of generated HTML
-  <ul> <!-- this.rootList -->
-    <li id="alice@example.com"> <!-- this.nodeForEmail['alice@example.com'] -->
+  <ul> <!-- this.listElement (already exists) -->
+    <li id="alice@example.com"> <!-- this.nodeForEmail.get('alice@example.com') -->
         <div class="existing-email">alice@example.com
             <button id="visit-alice@example.com" type="button">Visit</button>
         </div>
@@ -91,28 +94,23 @@ export default class AssignmentsView {
     if (this.nodeForEmail.has(email)) {
       const existingNode = this.nodeForEmail.get(email);
       const updatedNode = this.createListItemForEmail(email, assignedDogModels);
-      this.rootElement.replaceChild(updatedNode, existingNode);
+      this.listElement.replaceChild(updatedNode, existingNode);
       this.nodeForEmail.set(email, updatedNode);
     } else {
       const newNode = this.createListItemForEmail(email, assignedDogModels);
-      this.rootElement.append(newNode);
+      this.listElement.append(newNode);
     }
   }
 
   /**
-   * Generates the full representation of emails and assignments made to them.
-   * @returns {HTMLUListElement} Unordered list element with children representing emails
-   * and their assignments.
+   * Generates the full representation of emails and assignments made to them,
+   * adding them to this.listElement.
    */
-  createFullList() {
-    const ul = document.createElement('ul');
-    
+  generateWholeList() {
     this.assignModel.assignments.forEach((dogModels, email) => {
       const li = this.createListItemForEmail(email, dogModels);
-      ul.append(li);
+      this.listElement.append(li);
     });
-
-    return ul;
   }
 
   /**

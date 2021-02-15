@@ -11,6 +11,11 @@ body {
     justify-content: center;
 }
 
+.hide-if-no-script {
+    // by default hide, if script works it'll show the element
+    display: none;
+}
+
 p {
     margin: 0 0 1rem;
 }
