@@ -4,9 +4,15 @@ import mapReviver from "./map-reviver";
 
 export default class AssignmentsModel {
   constructor() {
-    // TODO: could use defineProperty to make storageName immutable?
+    /**
+     * Name of object in localStorage to use.
+     * @type {string}
+     */
     this.storageName = 'assignedDogs';
 
+    /**
+     * @type {onAssignCallback[]}
+     */
     this.callbacksForAssign = [];
 
     /**

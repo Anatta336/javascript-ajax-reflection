@@ -101,6 +101,7 @@ export default class DogPhotos {
    */
   prepareFirstDog() {
     this.loadingText.show();
+    this.currentPhoto.hide();
     this.adoption.hide();
 
     // request a random dog
@@ -127,6 +128,7 @@ export default class DogPhotos {
 
         // remove the loading text, add the adoption list
         this.loadingText.hide();
+        this.currentPhoto.show();
         this.adoption.show();
       });
   }

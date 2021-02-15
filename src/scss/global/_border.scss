@@ -1,0 +1,7 @@
+@use 'colours';
+@use 'rounded-corners';
+
+@mixin soft-border ($colour: colours.$standard-border-colour) {
+    @include rounded-corners.rounded-corners;
+    border: 3px solid $colour;
+}

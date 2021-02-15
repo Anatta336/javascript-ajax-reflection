@@ -1,0 +1,7 @@
+@use '../global';
+
+input[type=text],
+input[type=email] {
+    @include global.soft-border;
+    @include global.form-padding;
+}

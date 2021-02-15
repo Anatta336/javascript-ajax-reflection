@@ -2,21 +2,13 @@ import Disableable from './disableable';
 import removeAllChildren from './remove-children';
 
 export default class EmailValidation {
-
-  /**
-   * @callback onValidationCallback
-   * @param {string} email The email that is being checked.
-   * @param {boolean} isValid True if the email appears to be a valid email address.
-   */
-
   /**
    * 
    * @param {HTMLInputElement} inputField Text input element where the user can enter an email address.
    * @param {Disableable} buttonDisable Disableable that will be given a cause to disable when email is not valid.
    * @param {HTMLElement} warningContainer HTML element that will contain any warning messages about the email address.
-   * @param {onValidationCallback} onValidationCallback 
    */
-  constructor(inputField, buttonDisable, warningContainer, onValidationCallback) {
+  constructor(inputField, buttonDisable, warningContainer) {
     /**
      * Text input element where the user can enter an email address.
      * @type {HTMLInputElement}
@@ -34,11 +26,6 @@ export default class EmailValidation {
      * @type {HTMLElement}
      */
     this.warningContainer = warningContainer;
-
-    /**
-     * @type {onValidationCallback}
-     */
-    this.onValidationCallback = onValidationCallback;
 
     /**
      * Regular expression that provides a non-exhaustive check for whether
