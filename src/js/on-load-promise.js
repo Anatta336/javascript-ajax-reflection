@@ -1,6 +1,7 @@
 /**
  * Creates a promise that will fufill when the given image element has finished loading.
  * @param {HTMLImageElement} element An HTMLImageElement that will be monitored.
+ * @returns {Promise<HTMLImageElement>} The element that was being monitored.
  */
 export default function onLoadPromise(element) {
   return new Promise((fulfill, reject) => {

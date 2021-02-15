@@ -104,32 +104,42 @@ export default class DogPhotos {
     this.currentPhoto.hide();
     this.adoption.hide();
 
-    // request a random dog
-    this.photoSource.randomDog()
+    this.fetchRandomDogImageAndCredit().then(imageAndCredit => {
+      // add to page
+      this.currentPhoto.element.append(imageAndCredit.img);
+      this.currentPhoto.element.append(imageAndCredit.credit);
+
+      // remove the loading text, add the adoption list
+      this.loadingText.hide();
+      this.currentPhoto.show();
+      this.adoption.show();
+    });
+  }
+
+  /**
+   * Requests a new random dog, sets it as the currentDogModel, and then
+   * provides a new div element containing the loaded image and author credit.
+   * @returns {Promise<{image: HTMLImageElement, credit: HTMLAnchorElement}>}
+   * Promise that fulfills to the new currentDogModel's photo and author credit.
+   */
+  fetchRandomDogImageAndCredit() {
+    return this.photoSource.randomDog()
       .then(dogModel => {
         // set that dog as being current
         this.currentDogModel = dogModel;
 
         // create a View of that dog, and use that to create img element
         this.currentDogView = new DogView(dogModel);
-        const img = this.currentDogView.createImg();
-        // TODO: also create element that credits author
-        // TODO: combine this img generation with what's used in prepareNextDog()
+        const imageAndCredit = this.currentDogView.createImageAndCredit();
 
-        return img;
+        return imageAndCredit;
       })
-      .then(img => {
-        // wait until image has loaded
-        return onLoadPromise(img);
-      })
-      .then(img => {
-        // add img element to page
-        this.currentPhoto.element.append(img)
-
-        // remove the loading text, add the adoption list
-        this.loadingText.hide();
-        this.currentPhoto.show();
-        this.adoption.show();
+      .then(imageAndCredit => {
+        // wait until img has loaded, then pass the div to next stage
+        return onLoadPromise(imageAndCredit.img)
+          .then(() => {
+            return imageAndCredit;
+          });
       });
   }
 
@@ -146,32 +156,17 @@ export default class DogPhotos {
     // disable buttons so the previous dog can't be assigned again
     this.disableAssignButtons();
 
-    // request a random dog
-    this.photoSource.randomDog()
-      .then(dogModel => {
-        // set that dog as being current
-        this.currentDogModel = dogModel;
+    this.fetchRandomDogImageAndCredit().then(imageAndCredit => {
+      // remove old photo and credit
+      removeAllChildren(this.currentPhoto.element);
 
-        // create a View of that dog, and use that to create img element
-        // TODO: also create element that credits author
-        this.currentDogView = new DogView(dogModel);
-        const img = this.currentDogView.createImg();
-        return img;
-      })
-      .then(img => {
-        // wait until image has loaded
-        return onLoadPromise(img);
-      })
-      .then(img => {
-        // remove old photo
-        removeAllChildren(this.currentPhoto.element);
+      // add new to page
+      this.currentPhoto.element.append(imageAndCredit.img);
+      this.currentPhoto.element.append(imageAndCredit.credit);
 
-        // add new img to page
-        this.currentPhoto.element.append(img);
-
-        // re-enable assignment buttons
-        this.enableAssignButtons();
-      });
+      // re-enable assignment buttons
+      this.enableAssignButtons();
+    });
   }
 
   disableAssignButtons() {

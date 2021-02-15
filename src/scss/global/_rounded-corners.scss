@@ -1,3 +1,5 @@
+$corner-radius: 5px;
+
 @mixin rounded-corners {
-    border-radius: 5px;
+    border-radius: $corner-radius;
 }

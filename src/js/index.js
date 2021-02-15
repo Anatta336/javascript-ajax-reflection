@@ -8,7 +8,6 @@ document.querySelectorAll('.hide-if-no-script').forEach(element => {
   element.style.display = 'block';
 })
 
-
 /**
  * In place of the app's usual display, show a critical error message.
  * @param {string} message 
@@ -60,11 +59,7 @@ try {
 
 // TODO: more meaningful email validation messages
 
-// TODO: check for unsplashAccessKey being undefined or emptystring, and show a meaningful message
-
 // TODO: circle styling on assigned dogs
-
-// TODO: show author information on main photo display
 
 // TODO: maybe show author name on hover over assigned dogs
 
@@ -73,5 +68,3 @@ try {
 // TODO: styling for assigned emails, remove the list mark and put buttons lined up?
 
 // TODO: handle any errors from Unsplash
-
-// TODO: photo should be hidden entirely during first load, not just be an element with no children
