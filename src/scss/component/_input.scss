@@ -4,4 +4,9 @@ input[type=text],
 input[type=email] {
     @include global.soft-border;
     @include global.form-padding;
+
+    &:invalid {
+        border-color: global.$error-colour;
+        box-shadow: none;
+    }
 }

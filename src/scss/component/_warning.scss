@@ -1,5 +1,7 @@
+@use '../global';
+
 p.warning {
-    background-color: rgb(175, 2, 2);
+    background-color: global.$error-colour;
     color: #fff;
     padding: 0.3rem 2rem;
 }

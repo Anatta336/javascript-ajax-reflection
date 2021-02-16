@@ -33,6 +33,7 @@ export default class EmailValidation {
      * @property {boolean} isEmpty Has no content
      * @property {boolean} noAt Missing &#064; symbol.
      * @property {boolean} tooManyAt &#064; symbol appears more than once.
+     * @property {boolean} emptyLocal nothing before the &#064; symbol.
      * @property {string|boolean} invalidCharacterInLocal invalid characters in the local part of the email (before @)
      * @property {boolean} localTooLong local part of address is too long 
      * @property {string|boolean} invalidCharacterInDomain invalid characters in the domain part of the email (after @)
@@ -48,6 +49,7 @@ export default class EmailValidation {
     this.warnings = {
       noAt: false,
       tooManyAt: false,
+      emptyLocal: false,
       invalidCharacterInLocal: false,
       localTooLong: false,
       invalidCharacterInDomain: false,
@@ -57,20 +59,24 @@ export default class EmailValidation {
     }
 
     this.inputField.addEventListener('input', () => {
-      this.warnings = EmailValidation.generateWarnings(this.inputField.value);
-      const message = EmailValidation.generateWarningMessage(this.warnings);
-
-      // don't show a message or disable button if the email is totally empty
-      if (!this.warnings.isEmpty && message) {
-        this.buttonDisable.addDisableCause(this);
-        this.showWarningMessage(message);
-        this.styleAsInvalid(message);
-      } else {
-        this.buttonDisable.removeDisableCause(this);
-        this.hideWarningMessage();
-        this.styleAsValid();
-      }
+      this.runValidation();
     })
+  }
+
+  runValidation() {
+    this.warnings = EmailValidation.generateWarnings(this.inputField.value);
+    const message = EmailValidation.generateWarningMessage(this.warnings);
+
+    // don't show a message or disable button if the email is totally empty
+    if (!this.warnings.isEmpty && message) {
+      this.buttonDisable.addDisableCause(this);
+      this.showWarningMessage(message);
+      this.styleAsInvalid(message);
+    } else {
+      this.buttonDisable.removeDisableCause(this);
+      this.hideWarningMessage();
+      this.styleAsValid();
+    }
   }
 
   /**
@@ -122,6 +128,9 @@ export default class EmailValidation {
     }
     if (warnings.tooManyAt) {
       return `Should only contain one @`;
+    }
+    if (warnings.emptyLocal) {
+      return `Expected something before the @`;
     }
     if (warnings.invalidCharacterInLocal) {
       return `${warnings.invalidCharacterInLocal} is not allowed in an email address`;
@@ -204,6 +213,8 @@ export default class EmailValidation {
     const endsWithQuote = /"$/;
     const isQuoted = !!local.match(startsWithQuote)
       && !!local.match(endsWithQuote);
+
+    warnings.emptyLocal = (local.length === 0);
 
     // any character other than 0-9, a-z, A-Z, and specific special characters
     const invalidLocal = /[^\w\{\}\.!#$'*+=!?^_`|~`-]/;

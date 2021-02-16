@@ -40,17 +40,18 @@ try {
     emailField,
     emailButtonDisable,
     document.querySelector('.email-warnings')
-    );
-    
-    const dogPhotos = new DogPhotos(unsplashAccessKey, {
-      photo: document.querySelector('.photo'),
-      loading: document.querySelector('.loading'),
-      adoption: document.querySelector('.assignments'),
-      displayList: document.querySelector('.email-list'),
-      emailInput: emailField,
-      newEmailButton: emailButton,
-      emailButtonDisable: emailButtonDisable,
-    });
+  );
+  emailValidation.runValidation();
+
+  const dogPhotos = new DogPhotos(unsplashAccessKey, {
+    photo: document.querySelector('.photo'),
+    loading: document.querySelector('.loading'),
+    adoption: document.querySelector('.assignments'),
+    displayList: document.querySelector('.email-list'),
+    emailInput: emailField,
+    newEmailButton: emailButton,
+    emailButtonDisable: emailButtonDisable,
+  });
 } catch (error) {
   displayCriticalError(error.message)
 
@@ -58,8 +59,8 @@ try {
   throw error;
 }
 
-// TODO: more meaningful email validation messages
-
-// TODO: show author name on hover over assigned dogs
+// TODO: show author name on assigned dog photos, like they're shown on the current photo 
 
 // TODO: handle any errors from Unsplash
+
+// TODO: look up unit testing in JS?
