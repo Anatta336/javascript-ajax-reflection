@@ -32,8 +32,7 @@ export default class DogView {
     const credit = document.createElement('a');
     credit.classList.add('credit');
     credit.href = this.dogModel.creatorUrl;
-    credit.append(`Photo by ${this.dogModel.creatorName}`);
-
+    credit.appendChild(document.createTextNode(`Photo by ${this.dogModel.creatorName}`));
     return {
       img,
       credit,

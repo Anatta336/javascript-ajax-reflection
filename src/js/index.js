@@ -1,3 +1,4 @@
+import 'whatwg-fetch';
 import DogPhotos from './dog-photos';
 import EmailValidation from './email-validation';
 import Disableable from './disableable';
@@ -20,15 +21,15 @@ function displayCriticalError(message) {
 
   const p = document.createElement('p');
   p.classList.add('warning');
-  p.append(message);
+  p.appendChild(document.createTextNode(message));
 
   removeAllChildren(appContainer);
-  appContainer.append(p);
+  appContainer.appendChild(p);
 }
 
 try {
   const emailField = document.querySelector('#new-email');
-  const emailButton = document.querySelector('#visit-new-email');
+  const emailButton = document.querySelector('#assign-new-email');
   const emailButtonDisable = new Disableable(emailButton);
   
   if (!unsplashAccessKey || unsplashAccessKey === 'KEY-GOES-HERE') {
@@ -44,7 +45,7 @@ try {
     const dogPhotos = new DogPhotos(unsplashAccessKey, {
       photo: document.querySelector('.photo'),
       loading: document.querySelector('.loading'),
-      adoption: document.querySelector('.adoption'),
+      adoption: document.querySelector('.assignments'),
       displayList: document.querySelector('.email-list'),
       emailInput: emailField,
       newEmailButton: emailButton,
@@ -59,12 +60,6 @@ try {
 
 // TODO: more meaningful email validation messages
 
-// TODO: circle styling on assigned dogs
-
-// TODO: maybe show author name on hover over assigned dogs
-
-// TODO: styling for assigned dog photos
-
-// TODO: styling for assigned emails, remove the list mark and put buttons lined up?
+// TODO: show author name on hover over assigned dogs
 
 // TODO: handle any errors from Unsplash

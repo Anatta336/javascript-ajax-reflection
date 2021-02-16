@@ -73,7 +73,7 @@ export default class EmailValidation {
     removeAllChildren(this.warningContainer);
     const paragraph = document.createElement('p');
     paragraph.classList.add('warning');
-    paragraph.append(message);
-    this.warningContainer.append(paragraph);
+    paragraph.appendChild(document.createTextNode(message));
+    this.warningContainer.appendChild(paragraph);
   }
 }

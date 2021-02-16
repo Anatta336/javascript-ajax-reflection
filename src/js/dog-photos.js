@@ -106,8 +106,8 @@ export default class DogPhotos {
 
     this.fetchRandomDogImageAndCredit().then(imageAndCredit => {
       // add to page
-      this.currentPhoto.element.append(imageAndCredit.img);
-      this.currentPhoto.element.append(imageAndCredit.credit);
+      this.currentPhoto.element.appendChild(imageAndCredit.img);
+      this.currentPhoto.element.appendChild(imageAndCredit.credit);
 
       // remove the loading text, add the adoption list
       this.loadingText.hide();
@@ -161,8 +161,8 @@ export default class DogPhotos {
       removeAllChildren(this.currentPhoto.element);
 
       // add new to page
-      this.currentPhoto.element.append(imageAndCredit.img);
-      this.currentPhoto.element.append(imageAndCredit.credit);
+      this.currentPhoto.element.appendChild(imageAndCredit.img);
+      this.currentPhoto.element.appendChild(imageAndCredit.credit);
 
       // re-enable assignment buttons
       this.enableAssignButtons();

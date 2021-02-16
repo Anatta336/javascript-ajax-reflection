@@ -50,11 +50,11 @@ export default class AssignmentsView {
     this.nodeForEmail = new Map();
 
     /**
-     * Map to store a reference to the "visit" button for each email address.
+     * Map to store a reference to the "Assign" button for each email address.
      * @type {Map<string, HTMLButtonElement>}
      */
     this.buttonForEmail = new Map();
-    this.buttonsAreDisabled = true;
+    this.buttonsAreDisabled = false;
 
     const boundCallback = this.updateChangedAssignment.bind(this);
     assignModel.addCallbackOnAssign(boundCallback);
@@ -66,7 +66,7 @@ export default class AssignmentsView {
   <ul> <!-- this.listElement (already exists) -->
     <li id="alice@example.com"> <!-- this.nodeForEmail.get('alice@example.com') -->
         <div class="existing-email">alice@example.com
-            <button id="visit-alice@example.com" type="button">Visit</button>
+            <button type="button">Assign</button>
         </div>
         <ul class="assigned">
           <li><img src="dogPhotoA.jpg" alt="A good dog"></li>
@@ -75,7 +75,7 @@ export default class AssignmentsView {
     </li>
     <li id="bob@example.com"> <!-- this.nodeForEmail.get('bob@example.com') -->
         <div class="existing-email">bob@example.com
-            <button id="visit-bob@example.com" type="button">Visit</button>
+            <button type="button">Assign</button>
         </div>
         <ul class="assigned">
           <li><img src="dogPhotoC.jpg" alt="A good dog"></li>
@@ -98,7 +98,7 @@ export default class AssignmentsView {
       this.nodeForEmail.set(email, updatedNode);
     } else {
       const newNode = this.createListItemForEmail(email, assignedDogModels);
-      this.listElement.append(newNode);
+      this.listElement.appendChild(newNode);
     }
   }
 
@@ -109,7 +109,7 @@ export default class AssignmentsView {
   generateWholeList() {
     this.assignModel.assignments.forEach((dogModels, email) => {
       const li = this.createListItemForEmail(email, dogModels);
-      this.listElement.append(li);
+      this.listElement.appendChild(li);
     });
   }
 
@@ -125,15 +125,14 @@ export default class AssignmentsView {
     this.nodeForEmail.set(email, liForEmail);
 
     const div = document.createElement('div');
-    liForEmail.append(div);
+    liForEmail.appendChild(div);
     div.className = 'existing-email';
-    div.append(email);
+    div.appendChild(document.createTextNode(email));
     
     const button = document.createElement('button');
-    div.append(button);
-    button.id = `visit-${email}`;
+    div.appendChild(button);
     button.type = 'button';
-    button.append('Visit');
+    button.appendChild(document.createTextNode('Assign'));
     button.addEventListener('click', () => {
       this.assignCurrentDog(email);
     });
@@ -141,9 +140,9 @@ export default class AssignmentsView {
     this.buttonForEmail.set(email, button);
 
     const ulOfDogs = document.createElement('ul');
-    liForEmail.append(ulOfDogs);
+    liForEmail.appendChild(ulOfDogs);
     dogModels.forEach(dogModel => {
-      ulOfDogs.append(this.createListItemForDog(dogModel));
+      ulOfDogs.appendChild(this.createListItemForDog(dogModel));
     })
 
     return liForEmail;
@@ -157,7 +156,7 @@ export default class AssignmentsView {
   createListItemForDog(dogModel) {
     const liForDog = document.createElement('li');
     const img = document.createElement('img');
-    liForDog.append(img);
+    liForDog.appendChild(img);
     img.src = `${dogModel.url}&q=80&w=${this.photoWidth}`;
     img.alt = dogModel.altText;
 
