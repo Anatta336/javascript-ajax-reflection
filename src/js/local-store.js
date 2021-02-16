@@ -1,7 +1,24 @@
+/**
+ * Provides a way to store string key value pairs in a way that should persist
+ * in the browser between sessions.
+ * When possible it uses the localStorage API, but if that's not available
+ * (for example in IE11 opening a page from the file system) it will fall back
+ * to using cookies instead.
+ * If LocalStore needs to use cookies then the strings will be sanitised and
+ * may lose information. See the sanitiseForCookie method for details.
+ */
 export default class LocalStore {
+  /**
+   * Creates a LocalStore instance. Note that data is stored externally, and so
+   * is shared between multiple instances of LocalStore.
+   * @param {boolean} forceToUseCookies If true data is stored in cookies, even
+   * when localStorage is available. Not recommended.
+   */
   constructor(forceToUseCookies = false) {
     /**
-     * True if localStorage is available for use.
+     * True if localStorage should be used to store data.
+     * Changing this value will switch where data is being written and read,
+     * so may cause data loss.
      * @type {boolean}
      */
     this.shouldUseLocalStorage = !forceToUseCookies && !!window.localStorage;
