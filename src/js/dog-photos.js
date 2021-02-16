@@ -7,7 +7,12 @@ import onLoadPromise from './on-load-promise';
 import removeAllChildren from './remove-children';
 import Hideable from './hideable';
 import Disableable from './disableable';
+import disableWhenEmpty from './disable-when-empty';
 
+/**
+ * The main "app" which links together the separate parts.
+ * 
+ */
 export default class DogPhotos {
   /**
    * Creates a new DogPhotos instance.
@@ -90,14 +95,21 @@ export default class DogPhotos {
       this.inputForNewEmail.value = '';
     })
 
+    /**
+     * The "Assign" button associated with a new user entered email, wrapped in Disableable.
+     * @type {Disableable}
+     */
     this.emailButtonDisable = elements.emailButtonDisable;
+
+    // automatically disable "assign" button for new email if the field is empty.
+    disableWhenEmpty(this.inputForNewEmail, this.emailButtonDisable);
 
     this.prepareFirstDog();
   }
 
   /**
-   * Handles the fetching and displaying of the first dog photo,
-   * including the showing and hiding of elements such as loading text.
+   * Handles the fetching and displaying of the first dog photo, including the showing
+   * and hiding of elements such as loading text.
    */
   prepareFirstDog() {
     this.loadingText.show();

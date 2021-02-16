@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
+import Disableable from './disableable';
 import DogPhotos from './dog-photos';
 import EmailValidation from './email-validation';
-import Disableable from './disableable';
 import removeAllChildren from './remove-children';
 
 // un-hide anything that's meant to be hidden only when there's no script support
