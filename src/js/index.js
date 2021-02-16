@@ -43,15 +43,19 @@ try {
   );
   emailValidation.runValidation();
 
-  const dogPhotos = new DogPhotos(unsplashAccessKey, {
-    photo: document.querySelector('.photo'),
-    loading: document.querySelector('.loading'),
-    adoption: document.querySelector('.assignments'),
-    displayList: document.querySelector('.email-list'),
-    emailInput: emailField,
-    newEmailButton: emailButton,
-    emailButtonDisable: emailButtonDisable,
-  });
+  const dogPhotos = new DogPhotos(
+    unsplashAccessKey,
+    displayCriticalError,
+    {
+      photo: document.querySelector('.photo'),
+      loading: document.querySelector('.loading'),
+      adoption: document.querySelector('.assignments'),
+      displayList: document.querySelector('.email-list'),
+      emailInput: emailField,
+      newEmailButton: emailButton,
+      emailButtonDisable: emailButtonDisable,
+    }
+  );
 } catch (error) {
   displayCriticalError(error.message)
 

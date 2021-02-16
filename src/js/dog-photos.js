@@ -11,12 +11,18 @@ import disableWhenEmpty from './disable-when-empty';
 
 /**
  * The main "app" which links together the separate parts.
- * 
  */
 export default class DogPhotos {
+
+  /**
+   * @callback displayError
+   * @param {string} message The message to display as a critical error.
+   */
+
   /**
    * Creates a new DogPhotos instance.
    * @param {string} unsplashAccessKey API access key for Unsplash.
+   * @param {displayError} displayError Function that replaces the app's usual output with an error message.
    * @param {Object} elements Object with properties that reference various elements on the page.
    * @param {HTMLElement} elements.photo Element where dog's photo should be added as a child.
    * @param {HTMLElement} elements.loading Element that contains loading text that is displayed before the first dog.
@@ -26,12 +32,17 @@ export default class DogPhotos {
    * @param {HTMLButtonElement} elements.newEmailButton Button element that will assign current dog to the new email address.
    * @param {Disableable} elements.emailButtonDisable Button element wrapped in Disableable.
    */
-  constructor(unsplashAccessKey, elements) {
+  constructor(unsplashAccessKey, displayError, elements) {
     /**
      * PhotoSource object that provides access to the Unsplash API.
      * @type {PhotoSource}
      */
-    this.photoSource = new PhotoSource(unsplashAccessKey);
+    this.photoSource = new PhotoSource(unsplashAccessKey, displayError);
+
+    /**
+     * @type {displayError}
+     */
+    this.displayError = displayError;
 
     /**
      * Model for dog that's waiting for assignment.
