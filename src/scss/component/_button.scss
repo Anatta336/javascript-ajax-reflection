@@ -5,11 +5,11 @@ button {
     @include global.form-padding;
 
     margin: 8px;
-    background-color: rgb(92, 114, 211);
+    background-color: rgb(125, 144, 228);
     color: 3px solid rgb(0, 0, 0);
 
     &:hover {
-        background-color: rgb(157, 170, 226);
+        background-color: rgb(182, 222, 245);
     }
 
     &:disabled {
