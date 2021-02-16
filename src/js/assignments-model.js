@@ -82,7 +82,7 @@ export default class AssignmentsModel {
     }
     
     this.assignments.get(email).push(dogModel);
-
+    this.writeToStore();
     this.triggerAssignCallbacks(email, this.assignments.get(email));
   }
 
