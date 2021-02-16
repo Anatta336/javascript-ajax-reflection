@@ -1,4 +1,4 @@
-import DogModel from "./dog-model";
+import DogModel from './dog-model';
 
 export default class PhotoSource {
   constructor (unsplashAccessKey) {

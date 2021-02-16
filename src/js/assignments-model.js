@@ -1,11 +1,12 @@
-import DogModel from "./dog-model";
-import mapReplacer from "./map-replacer";
-import mapReviver from "./map-reviver";
+import DogModel from './dog-model';
+import mapReplacer from './map-replacer';
+import mapReviver from './map-reviver';
+import LocalStore from './local-store'
 
 export default class AssignmentsModel {
   constructor() {
     /**
-     * Name of object in localStorage to use.
+     * Name to use in LocalStore to identify data.
      * @type {string}
      */
     this.storageName = 'assignedDogs';
@@ -14,6 +15,8 @@ export default class AssignmentsModel {
      * @type {onAssignCallback[]}
      */
     this.callbacksForAssign = [];
+
+    this.store = new LocalStore();
 
     /**
      * Map where key names are emails, with each value being an
@@ -113,23 +116,22 @@ export default class AssignmentsModel {
   }
 
   /**
-   * Writes this model's current state to localStorage.
+   * Writes this model's current state to LocalStore.
    */
   writeToStore() {
-    localStorage.setItem(this.storageName, JSON.stringify(this.assignments, mapReplacer));
+    this.store.storeString(this.storageName, JSON.stringify(this.assignments, mapReplacer));
   }
 
   /**
-   * If localStorage has assignment data uses it to overwrite whatever
-   * is stored in this AssignmentsModel.
+   * If LocalStore has assignment data load it and overwrite anything already
+   * stored in this AssignmentsModel.
    */
   readFromStore() {
-    const stringified = localStorage.getItem(this.storageName);
+    const stringified = this.store.retrieveString(this.storageName);
     if (!stringified) {
-      // nothing in localStorage to read
+      // nothing available
       return;
     }
-
     this.assignments = JSON.parse(stringified, mapReviver);
   }
 }

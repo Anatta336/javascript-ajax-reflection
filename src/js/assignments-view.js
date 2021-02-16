@@ -1,5 +1,5 @@
-import AssignmentsModel from "./assignments-model";
-import DogModel from "./dog-model";
+import AssignmentsModel from './assignments-model';
+import DogModel from './dog-model';
 
 /**
  * Handles representing an AssignmentsModel as HTML elements on the page.
