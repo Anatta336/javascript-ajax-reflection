@@ -1,0 +1,39 @@
+@use '../global';
+
+.current {
+    // position anchor for credit
+    position: relative;
+    
+    margin: 1rem;
+    line-height: 0;
+    
+    img {
+        @include global.rounded-corners;
+        @include global.basic-shadow;
+    }
+
+    a {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        line-height: 1;
+        
+        padding: 8px 12px;
+
+        border-top-left-radius: global.$corner-radius;
+        border-bottom-right-radius: global.$corner-radius;
+        
+        color: #fff;
+        font-size: 1rem;
+        background-color: rgba($color: #000, $alpha: 0.6);
+        text-decoration: none;
+        
+        &:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+        &:visited {
+            color: #fff;
+        }
+    }
+}

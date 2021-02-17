@@ -24,15 +24,16 @@ export default class DogPhotos {
    * @param {string} unsplashAccessKey API access key for Unsplash.
    * @param {displayError} displayError Function that replaces the app's usual output with an error message.
    * @param {Object} elements Object with properties that reference various elements on the page.
-   * @param {HTMLElement} elements.photo Element where dog's photo should be added as a child.
+   * @param {HTMLElement} elements.currentDog Element where dog's photo should be added as a child.
    * @param {HTMLElement} elements.loading Element that contains loading text that is displayed before the first dog.
    * @param {HTMLElement} elements.adoption Element that contains everything related to assigning a dog, should be hidden before first image loads.
    * @param {HTMLUListElement} elements.displayList Unordered List Element where assignments should be added.
    * @param {HTMLInputElement} elements.emailInput Text input element where user can enter a new email address.
    * @param {HTMLButtonElement} elements.newEmailButton Button element that will assign current dog to the new email address.
    * @param {Disableable} elements.emailButtonDisable Button element wrapped in Disableable.
+   * @param {number} currentPhotoWidth Horizontal size of photo to display for current dog, in px.
    */
-  constructor(unsplashAccessKey, displayError, elements) {
+  constructor(unsplashAccessKey, displayError, elements, currentPhotoWidth = 400) {
     /**
      * PhotoSource object that provides access to the Unsplash API.
      * @type {PhotoSource}
@@ -51,12 +52,6 @@ export default class DogPhotos {
     this.currentDogModel;
 
     /**
-     * View for dog that's waiting for assignment.
-     * @type {DogView}
-     */
-    this.currentDogView;
-
-    /**
      * @type {AssignmentsModel}
      */
     this.assignmentsModel = new AssignmentsModel();
@@ -64,7 +59,7 @@ export default class DogPhotos {
     /**
      * @type {Hideable}
      */
-    this.currentPhoto = new Hideable(elements.photo);
+    this.currentPhoto = new Hideable(elements.currentDog);
     
     /**
      * @type {Hideable}
@@ -80,6 +75,12 @@ export default class DogPhotos {
      * @type {HTMLUListElement}
      */
     this.adoptionList = elements.displayList;
+
+    /**
+     * Horizontal size of photo to display, in px.
+     * @type {number}
+     */
+    this.photoWidth = currentPhotoWidth;
 
     /**
      * @type {AssignmentsView}
@@ -150,12 +151,7 @@ export default class DogPhotos {
       .then(dogModel => {
         // set that dog as being current
         this.currentDogModel = dogModel;
-
-        // create a View of that dog, and use that to create img element
-        this.currentDogView = new DogView(dogModel);
-        const imageAndCredit = this.currentDogView.createImageAndCredit();
-
-        return imageAndCredit;
+        return DogView.createImageAndCredit(dogModel, this.photoWidth);
       })
       .then(imageAndCredit => {
         // wait until img has loaded, then pass the div to next stage

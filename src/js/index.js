@@ -47,7 +47,7 @@ try {
     unsplashAccessKey,
     displayCriticalError,
     {
-      photo: document.querySelector('.photo'),
+      currentDog: document.querySelector('.current'),
       loading: document.querySelector('.loading'),
       adoption: document.querySelector('.assignments'),
       displayList: document.querySelector('.email-list'),
@@ -62,9 +62,3 @@ try {
   // re-throw the error so it'll appear in the console with any extra information
   throw error;
 }
-
-// TODO: show author name on assigned dog photos, like they're shown on the current photo 
-
-// TODO: handle any errors from Unsplash
-
-// TODO: look up unit testing in JS?

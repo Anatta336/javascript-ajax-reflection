@@ -1,5 +1,6 @@
 import AssignmentsModel from './assignments-model';
 import DogModel from './dog-model';
+import DogView from './dog-view';
 
 /**
  * Handles representing an AssignmentsModel as HTML elements on the page.
@@ -16,8 +17,9 @@ export default class AssignmentsView {
    * @param {AssignmentsModel} assignModel AssignmentsModel to represent.
    * @param {HTMLUListElement} listElement List element to add list items to.
    * @param {assignCurrentToEmail} assignCurrentDog Callback to trigger assigning the current dog to an email address.
+   * @param {number} photoWidth Horizontal size of photo to display for assigned dogs, in px.
    */
-  constructor(assignModel, listElement, assignCurrentDog) {
+  constructor(assignModel, listElement, assignCurrentDog, photoWidth = 120) {
     /**
      * The assignments that this View represents.
      * @type {AssignmentsModel}
@@ -40,7 +42,7 @@ export default class AssignmentsView {
      * Width of photos to display in px
      * @type {number} 
      */
-    this.photoWidth = 120;
+    this.photoWidth = photoWidth;
 
     /**
      * Keys are email address as a strong, value is the list item element
@@ -63,23 +65,31 @@ export default class AssignmentsView {
   }
 
   /* example of generated HTML
-  <ul> <!-- this.listElement (already exists) -->
-    <li id="alice@example.com"> <!-- this.nodeForEmail.get('alice@example.com') -->
+  <ul class="email-list"> <!-- this.listElement (already exists) -->
+    <li> <!-- this.nodeForEmail.get('alice@example.com') -->
         <div class="existing-email">alice@example.com
             <button type="button">Assign</button>
         </div>
         <ul class="assigned">
-          <li><img src="dogPhotoA.jpg" alt="A good dog"></li>
-          <li><img src="dogPhotoB.jpg" alt="A good dog"></li>
+          <li class="photo">
+            <img src="dogPhotoA.jpg" alt="A good dog">
+            <a href="...">UsernameA</a>
+          </li>
         </ul>
     </li>
-    <li id="bob@example.com"> <!-- this.nodeForEmail.get('bob@example.com') -->
+    <li> <!-- this.nodeForEmail.get('bob@example.com') -->
         <div class="existing-email">bob@example.com
             <button type="button">Assign</button>
         </div>
         <ul class="assigned">
-          <li><img src="dogPhotoC.jpg" alt="A good dog"></li>
-          <li><img src="dogPhotoD.jpg" alt="A good dog"></li>
+          <li class="photo">
+            <img src="dogPhotoB.jpg" alt="A good dog">
+            <a href="...">UsernameB</a>
+          </li>
+          <li class="photo">
+            <img src="dogPhotoC.jpg" alt="A good dog">
+            <a href="...">UsernameC</a>
+          </li>
         </ul>
     </li>
   </ul>
@@ -121,16 +131,14 @@ export default class AssignmentsView {
    */
   createListItemForEmail(email, dogModels) {
     const liForEmail = document.createElement('li');
-    liForEmail.id = email;
     this.nodeForEmail.set(email, liForEmail);
 
     const div = document.createElement('div');
-    liForEmail.appendChild(div);
     div.className = 'existing-email';
     div.appendChild(document.createTextNode(email));
+    liForEmail.appendChild(div);
     
     const button = document.createElement('button');
-    div.appendChild(button);
     button.type = 'button';
     button.appendChild(document.createTextNode('Assign'));
     button.addEventListener('click', () => {
@@ -138,12 +146,14 @@ export default class AssignmentsView {
     });
     button.disabled = this.buttonsAreDisabled;
     this.buttonForEmail.set(email, button);
+    div.appendChild(button);
 
     const ulOfDogs = document.createElement('ul');
-    liForEmail.appendChild(ulOfDogs);
+    ulOfDogs.classList.add('assigned');
     dogModels.forEach(dogModel => {
       ulOfDogs.appendChild(this.createListItemForDog(dogModel));
     })
+    liForEmail.appendChild(ulOfDogs);
 
     return liForEmail;
   }
@@ -155,11 +165,12 @@ export default class AssignmentsView {
    */
   createListItemForDog(dogModel) {
     const liForDog = document.createElement('li');
-    const img = document.createElement('img');
-    liForDog.appendChild(img);
-    img.src = `${dogModel.url}&q=80&w=${this.photoWidth}`;
-    img.alt = dogModel.altText;
+    liForDog.classList.add('photo');
 
+    const imgAndCredit = DogView.createImageAndCredit(dogModel, this.photoWidth)
+    liForDog.appendChild(imgAndCredit.img);
+    liForDog.appendChild(imgAndCredit.credit);
+    
     return liForDog;
   }
 

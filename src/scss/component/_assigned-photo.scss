@@ -1,30 +1,29 @@
 @use '../global';
-.photo {
-    
-    // position anchor for credit
+
+.assigned .photo {
     position: relative;
-    
-    margin: 1rem;
+
+    margin: 3px;
     line-height: 0;
-    
+
     img {
         @include global.rounded-corners;
-        @include global.basic-shadow;
     }
 
     a {
         position: absolute;
+        left: 0;
         right: 0;
         bottom: 0;
         line-height: 1;
         
-        padding: 8px 12px;
+        padding: 3px 6px;
 
-        border-top-left-radius: global.$corner-radius;
+        border-bottom-left-radius: global.$corner-radius;
         border-bottom-right-radius: global.$corner-radius;
         
         color: #fff;
-        font-size: 1rem;
+        font-size: 0.75rem;
         background-color: rgba($color: #000, $alpha: 0.6);
         text-decoration: none;
         

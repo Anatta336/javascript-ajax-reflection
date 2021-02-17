@@ -2,37 +2,20 @@ import DogModel from './dog-model';
 
 export default class DogView {
   /**
-   * Create a new DogView for the given DogModel.
-   * @param {DogModel} dogModel The dog to represent.
-   * @param {number} photoWidth Width of photo to display, in px.
-   */
-  constructor (dogModel, photoWidth = 400) {
-    /**
-     * The DogModel to represent.
-     * @type {DogModel}
-     */
-    this.dogModel = dogModel;
-
-    /**
-     * Width of photo to fetch, in px.
-     * @type {number}
-     */
-    this.photoWidth = photoWidth;
-  }
-
-  /**
    * Creates HTML elements for the photo and a credit for its creator.
+   * @param {DogModel} dogModel Dog photo to display.
+   * @param {number} photoWidth Horizontal size of photo to fetch, in px.
    * @returns {{img: HTMLImageElement, credit: HTMLAnchorElement}}
    * .img is an image element holding the photo, .credit is an anchor element
    * naming the photo's creator and linking to their page on Unsplash.
    */
-  createImageAndCredit() {
-    const img = this.createImg();
+  static createImageAndCredit(dogModel, photoWidth) {
+    const img = DogView.createImg(dogModel, photoWidth);
 
     const credit = document.createElement('a');
     credit.classList.add('credit');
-    credit.href = this.dogModel.creatorUrl;
-    credit.appendChild(document.createTextNode(`Photo by ${this.dogModel.creatorName}`));
+    credit.href = dogModel.creatorUrl;
+    credit.appendChild(document.createTextNode(`Photo by ${dogModel.creatorName}`));
     return {
       img,
       credit,
@@ -41,12 +24,14 @@ export default class DogView {
 
   /**
    * Creates an image element using the data from this DogModel.
+   * @param {DogModel} dogModel Dog photo to display.
+   * @param {number} photoWidth Horizontal size of photo to fetch, in px.
    * @returns {HTMLImageElement} img element set up to display this DogModel's photo.
    */
-  createImg() {
+  static createImg(dogModel, photoWidth) {
     const img = document.createElement('img');
-    img.src = `${this.dogModel.url}&q=80&w=${this.photoWidth}`;
-    img.alt = this.dogModel.altText;
+    img.src = `${dogModel.url}&q=80&w=${photoWidth}`;
+    img.alt = dogModel.altText;
     return img;
   }
 }
