@@ -1,7 +1,7 @@
 import DogModel from './dog-model';
-import mapReplacer from './map-replacer';
-import mapReviver from './map-reviver';
-import LocalStore from './local-store'
+import mapReplacer from '../utility/map-replacer'
+import mapReviver from '../utility/map-reviver';
+import LocalStore from '../utility/local-store'
 
 export default class AssignmentsModel {
   constructor() {

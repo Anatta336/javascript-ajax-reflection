@@ -104,6 +104,8 @@ export default class PhotoSource {
         dogData.alt_description,
         dogData.user.name,
         dogData.user.links.html,
+        dogData.width,
+        dogData.height,
       );
     })
     .catch(error => {

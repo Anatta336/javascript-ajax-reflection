@@ -1,18 +1,18 @@
 import AssignmentsModel from './assignments-model';
 import AssignmentsView from './assignments-view';
 import DogModel from './dog-model';
-import DogView from './dog-view';
+import dogImgAndCredit from './dog-img-and-credit';
 import PhotoSource from './photo-source';
-import onLoadPromise from './on-load-promise';
-import removeAllChildren from './remove-children';
-import Hideable from './hideable';
-import Disableable from './disableable';
-import disableWhenEmpty from './disable-when-empty';
+import onLoadPromise from '../utility/on-load-promise';
+import removeAllChildren from '../utility/remove-children';
+import Hideable from '../utility/hideable';
+import Disableable from '../utility/disableable';
+import disableWhenEmpty from '../utility/disable-when-empty';
 
 /**
  * The main "app" which links together the separate parts.
  */
-export default class DogPhotos {
+export default class PhotoApp {
 
   /**
    * @callback displayError
@@ -46,10 +46,10 @@ export default class DogPhotos {
     this.displayError = displayError;
 
     /**
-     * Model for dog that's waiting for assignment.
+     * Dog photo that's waiting for assignment.
      * @type {DogModel}
      */
-    this.currentDogModel;
+    this.currentDog;
 
     /**
      * @type {AssignmentsModel}
@@ -88,9 +88,7 @@ export default class DogPhotos {
     this.assignmentsView = new AssignmentsView(
       this.assignmentsModel,
       this.adoptionList,
-      (email) => {
-        this.assignCurrentDog(email);
-      },
+      this.assignCurrentDog.bind(this),
     );
 
     /**
@@ -150,8 +148,8 @@ export default class DogPhotos {
     return this.photoSource.randomDog()
       .then(dogModel => {
         // set that dog as being current
-        this.currentDogModel = dogModel;
-        return DogView.createImageAndCredit(dogModel, this.photoWidth);
+        this.currentDog = dogModel;
+        return dogImgAndCredit(dogModel, this.photoWidth);
       })
       .then(imageAndCredit => {
         // wait until img has loaded, then pass the div to next stage
@@ -163,11 +161,11 @@ export default class DogPhotos {
   }
 
   /**
-   * Attempts to assigns the currently viewed dog to the given email.
+   * Assigns the currently viewed dog to the given email.
    * @param {string} email Email to assign dog to.
    */
   assignCurrentDog(email) {
-    this.assignmentsModel.assignDog(email, this.currentDogModel);
+    this.assignmentsModel.assignDog(email, this.currentDog);
     this.prepareNextDog();
   }
 

@@ -1,6 +1,6 @@
 import AssignmentsModel from './assignments-model';
 import DogModel from './dog-model';
-import DogView from './dog-view';
+import dogImgAndCredit from './dog-img-and-credit';
 
 /**
  * Handles representing an AssignmentsModel as HTML elements on the page.
@@ -141,9 +141,7 @@ export default class AssignmentsView {
     const button = document.createElement('button');
     button.type = 'button';
     button.appendChild(document.createTextNode('Assign'));
-    button.addEventListener('click', () => {
-      this.assignCurrentDog(email);
-    });
+    button.addEventListener('click', this.assignCurrentDog.bind(this, email));
     button.disabled = this.buttonsAreDisabled;
     this.buttonForEmail.set(email, button);
     div.appendChild(button);
@@ -167,10 +165,10 @@ export default class AssignmentsView {
     const liForDog = document.createElement('li');
     liForDog.classList.add('photo');
 
-    const imgAndCredit = DogView.createImageAndCredit(dogModel, this.photoWidth)
+    const imgAndCredit = dogImgAndCredit(dogModel, this.photoWidth);
     liForDog.appendChild(imgAndCredit.img);
     liForDog.appendChild(imgAndCredit.credit);
-    
+
     return liForDog;
   }
 

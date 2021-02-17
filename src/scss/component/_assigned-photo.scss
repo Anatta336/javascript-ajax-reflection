@@ -8,6 +8,9 @@
 
     img {
         @include global.rounded-corners;
+
+        font-size: 0.75rem;
+        background-color: rgb(100, 100, 100);
     }
 
     a {

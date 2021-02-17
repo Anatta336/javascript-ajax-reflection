@@ -8,8 +8,10 @@ export default class DogModel {
    * @param {string} altText Text describing the image, suitable for use as alt text.
    * @param {string} creatorName Name of the image's creator.
    * @param {string} creatorUrl URL to the image creator's page on Unsplash.
+   * @param {number} width Width of full size photo.
+   * @param {number} height Height of full size photo.
    */
-  constructor (url, altText, creatorName, creatorUrl) {
+  constructor (url, altText, creatorName, creatorUrl, width, height) {
     /**
      * URL of the image, can add query to request a specific size.
      * e.g. &q=80&w=128 for a 80% quality jpeg with 128px width
@@ -34,5 +36,11 @@ export default class DogModel {
      * @type {string}
      */
     this.creatorUrl = creatorUrl;
+
+    /**
+     * Aspect ratio (width / height) of the photo
+     * @type {number}
+     */
+    this.aspectRatio = width / height;
   }
 }

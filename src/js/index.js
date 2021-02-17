@@ -1,8 +1,8 @@
 import 'whatwg-fetch';
-import Disableable from './disableable';
-import DogPhotos from './dog-photos';
-import EmailValidation from './email-validation';
-import removeAllChildren from './remove-children';
+import Disableable from './utility/disableable';
+import PhotoApp from './photos-app/photo-app';
+import EmailValidation from './validation/email-validation';
+import removeAllChildren from './utility/remove-children';
 
 // un-hide anything that's meant to be hidden only when there's no script support
 document.querySelectorAll('.hide-if-no-script').forEach(element => {
@@ -43,7 +43,7 @@ try {
   );
   emailValidation.runValidation();
 
-  const dogPhotos = new DogPhotos(
+  const app = new PhotoApp(
     unsplashAccessKey,
     displayCriticalError,
     {

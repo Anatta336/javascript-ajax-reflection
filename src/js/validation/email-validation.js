@@ -1,5 +1,5 @@
-import Disableable from './disableable';
-import removeAllChildren from './remove-children';
+import Disableable from '../utility/disableable';
+import removeAllChildren from '../utility/remove-children';
 
 export default class EmailValidation {
   /**
