@@ -1,0 +1,27 @@
+@use '../global';
+
+@mixin photo-credit {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    line-height: 1;
+    
+    padding: 3px 6px;
+
+    border-bottom-left-radius: global.$corner-radius;
+    border-bottom-right-radius: global.$corner-radius;
+    
+    color: #fff;
+    font-size: 0.75rem;
+    background-color: rgba($color: #000, $alpha: 0.6);
+    text-decoration: none;
+    
+    &:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+    &:visited {
+        color: #fff;
+    }
+}
