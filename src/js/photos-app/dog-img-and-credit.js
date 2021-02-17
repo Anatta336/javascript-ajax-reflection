@@ -12,9 +12,7 @@ export default function dogImgAndCredit(dogModel, photoWidth) {
   const img = document.createElement('img');
   img.src = `${dogModel.url}&q=80&w=${photoWidth}`;
   img.width = `${photoWidth}`;
-  if (dogModel.aspectRatio) {
-    img.height = `${photoWidth / dogModel.aspectRatio}`;
-  }
+  img.height = `${photoWidth / dogModel.aspectRatio}`;
   img.alt = dogModel.altText;    
 
   const credit = document.createElement('a');
