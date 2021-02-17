@@ -144,11 +144,11 @@ export default class EmailValidation {
     if (warnings.emptyDomain) {
       return `Expected something after the @`;
     }
-    if (warnings.zeroLengthDnsLabel) {
-      return `Unexpected . in the second part of the email address`
-    }
     if (warnings.missingTopLevelDomain) {
       return `Missing the end part of the address such as .com`;
+    }
+    if (warnings.zeroLengthDnsLabel) {
+      return `Unexpected . in the second part of the email address`
     }
     return '';
   }
