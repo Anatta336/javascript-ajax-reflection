@@ -103,6 +103,13 @@ export default class PhotoApp {
     this.buttonForNewEmail.addEventListener('click', () => {
       this.assignCurrentDog(this.inputForNewEmail.value);
       this.inputForNewEmail.value = '';
+
+      // changing the value through code doesn't trigger an event, so dispatch one ourselves.
+      // This is the "old fashioned" event creation technique to please IE11.
+      // Modern browsers can just use: new InputEvent('input')
+      const inputEvent = document.createEvent('Event');
+      inputEvent.initEvent('input', true, true);
+      this.inputForNewEmail.dispatchEvent(inputEvent);
     })
 
     /**

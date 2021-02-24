@@ -3,6 +3,9 @@ import Disableable from "./disableable";
 /**
  * Watches the given inputField, making Disableable object disabled whenever
  * the inputField is empty.
+ * Relies on the 'input' event being triggered whenever the inputField's value
+ * changes. If changed through code the event is not triggered. If you want
+ * this to update you can dispatch a new InputEvent('input') from the inputField.
  * @param {HTMLInputElement} inputField Input element to watch.
  * @param {Disableable} toDisable Object to disable when input is empty.
  * @throws {TypeError} If inputField or toDisable are not required typed.
